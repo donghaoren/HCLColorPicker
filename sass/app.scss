@@ -1,0 +1,30 @@
+body {
+    font-size: 14px;
+    cursor: default;
+}
+
+.control-slider {
+    label {
+    }
+    span {
+    }
+    input {
+        width: 400px;
+    }
+}
+
+.projection-picker-view {
+    display: relative;
+    .projection-view {
+        position: absolute; left: 0; top: 0;
+    }
+    .projection-picker-controls {
+        position: absolute; left: 0; top: 0;
+
+        circle {
+            fill: black;
+            stroke: white;
+            stroke-width: 1;
+        }
+    }
+}
