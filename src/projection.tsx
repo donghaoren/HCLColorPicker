@@ -29,6 +29,12 @@ export class ProjectionViewWebGL extends React.Component<ProjectionViewProps, {}
     public componentDidMount() {
         this.platform = new StardustWebGL.WebGLCanvasPlatform2D(this.refs.canvas, this.props.width, this.props.height);
 
+        let colorCode: string;
+        if(this.props.mode == ProjectionViewMode.HCL) {
+            colorCode = `hcl2rgb(Color(color.x / 180 * PI, color.y / 100, color.z / 100, 1.0))`;
+        } else {
+            colorCode = `lab2rgb(Color(color.x / 100, color.y / 100, color.z / 100, 1.0))`;
+        }
         let spec = Stardust.mark.compile(`
             mark Pixel(
                 width: float, height: float,
@@ -38,8 +44,7 @@ export class ProjectionViewWebGL extends React.Component<ProjectionViewProps, {}
                 step: float
             ) {
                 let color = x * eX + y * eY + center;
-                // let cc = s3_hcl2rgb(Vector3(color.x / 360 * PI, color.y / 100, color.z / 100));
-                let cc = hcl2rgb(Color(color.x / 180 * PI, color.y / 100, color.z / 100, 1.0));
+                let cc = ${colorCode};
                 let na = 1.0;
                 let nr = cc.r;
                 let ng = cc.g;
@@ -107,7 +112,8 @@ export class ProjectionViewWebGL extends React.Component<ProjectionViewProps, {}
         marks.attr("eY", this.props.eY);
         marks.attr("center", this.props.center);
 
-        this.platform.clear([0, 0, 0, 1]);
+        let v = 119 / 255.0;
+        this.platform.clear([v, v, v, 1]);
         marks.render();
     }
 
@@ -156,7 +162,16 @@ export class ProjectionViewChroma extends React.Component<ProjectionViewProps, {
                 let b = this.props.eX[1] * x + this.props.eY[1] * y + this.props.center[1];
                 let c = this.props.eX[2] * x + this.props.eY[2] * y + this.props.center[2];
 
-                let color = chroma.lch(c, b, a);
+                let color: any;
+
+                if(this.props.mode == ProjectionViewMode.HCL) {
+                    color = chroma.lch(c, b, a);
+                }
+
+                if(this.props.mode == ProjectionViewMode.LAB) {
+                    color = chroma.lab(a, b, c);
+                }
+
                 if (!(color as any).clipped()) {
                     let x1 = (x + 1) / 2 * canvas.width;
                     let y1 = (y + 1) / 2 * canvas.height;

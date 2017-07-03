@@ -1,6 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Lato:300,400,700');
+
+@mixin font-main {
+    font-family: 'Lato', sans-serif;
+}
+@mixin font-mono {
+    font-family: 'Inconsolata', monospace;
+}
+
+$text-color: #CCCCCC;
+
 body {
     font-size: 14px;
     cursor: default;
+    -webkit-user-select: none;
+    user-select: none;
+    @include font-main;
+    background: rgb(119, 119, 119);
+    color: $text-color;
 }
 
 .control-slider {
@@ -14,17 +30,57 @@ body {
 }
 
 .projection-picker-view {
-    display: relative;
-    .projection-view {
-        position: absolute; left: 0; top: 0;
+    display: flex;
+    flex-direction: left;
+
+    .projection-picker-canvas {
+        position: relative;
+
+        touch-action: none;
+        box-sizing: content-box;
+        border: 1px solid $text-color;
+
+        .projection-view {
+            position: absolute; left: 0; top: 0;
+        }
+        .projection-picker-knobs {
+            position: absolute; left: 0; top: 0;
+
+            circle {
+                fill: black;
+                stroke: white;
+                stroke-width: 1;
+                cursor: pointer;
+            }
+        }
     }
     .projection-picker-controls {
-        position: absolute; left: 0; top: 0;
+        margin-left: 10px;
+        padding: 5px;
 
-        circle {
-            fill: black;
-            stroke: white;
-            stroke-width: 1;
+        .projection-picker-colors {
+            @include font-mono;
+            background: rgb(119, 119, 119);
+            tr {
+                height: 20px;
+                line-height: 20px;
+                margin-bottom: 2px;
+
+                td > span.color {
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
+                td > span.text {
+                    cursor: text;
+                    user-select: text;
+                    -webkit-user-select: text;
+                    padding: 0 5px;
+                    color: $text-color;
+                }
+            }
         }
     }
 }

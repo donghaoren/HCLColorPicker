@@ -16,11 +16,6 @@ export class HCLColorPickerMainView extends React.Component<{}, {}> {
     public render() {
         return (
             <div>
-                <Slider label="Hue" min={0} max={360} value={this.state.H} onChange={(value) => {
-                    this.setState({
-                        H: value
-                    });
-                }} />
                 <div>
                     <ProjectionPickerView
                         width={500}

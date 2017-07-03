@@ -54,4 +54,10 @@ export module vector {
     export function normalize(a: Vector3): Vector3 {
         return scale(a, 1.0 / len(a));
     }
+
+    export function rotate(v: Vector3, axis: Vector3, angle: number): Vector3 {
+        let cosTheta = Math.cos(angle);
+        let sinTheta = Math.sin(angle);
+        return add(scale(v, cosTheta), add(scale(cross(axis, v), sinTheta), scale(axis, dot(axis, v) * (1 - cosTheta))));
+    }
 }
